@@ -70,20 +70,23 @@ firebase.initializeApp(Config);
  }
 
 //OAuth for google sign in on firebase------------------------------------------//
-  export const auth = firebase.auth()
 
-  const provider = new firebase.auth.GoogleAuthProvider();
-  provider.setCustomParameters({ prompt: 'select_account' });
-  export const signInWithGoogle = () => auth.signInWithPopup(provider);
+  export const googleProvider = new firebase.auth.GoogleAuthProvider();
+  googleProvider.setCustomParameters({ prompt: 'select_account' });
+  export const signInWithGoogle = () => auth.signInWithPopup(googleProvider);
+
+export const getCurrentUser = () => {
+  return new Promise((resolve,reject) => {
+    const unsubscribe = auth.onAuthStateChanged(userAuth => {
+      unsubscribe()
+      resolve(userAuth)
+    },reject)
+  })
+}
+
+
   //------------------------------------------------------------------------------//
-
+  export const auth = firebase.auth()
   export const firestore = firebase.firestore()
-// firestore.collection('users').doc('ACe12L2Suv6x6mhXQz3m').collection('cartItems').doc('fxHDid46e1v6Q666VEgo')
-//=====Identical way of doing the above code in less verbose form
-// firestore.doc('/users/ACe12L2Suv6x6mhXQz3m/cartItems/fxHDid46e1v6Q666VEgo')
-
-//======below is way to grab collection of items within cartItems
-// firestore.collection('/users/ACe12L2Suv6x6mhXQz3m/cartItems/')
-
 
   export default firebase
